@@ -1,0 +1,372 @@
+openapi: 3.0.0
+info:
+  title: ""
+  description: ""
+  version: "1.0"
+servers:
+- url: https://virtserver.swaggerhub.com/EVGEDOUM_1/eshop/1.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8080/EVGEDOUM_1/eshop/1.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /users:
+    get:
+      summary: Get all users
+      operationId: usersGET
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Create a new user
+      operationId: usersPOST
+      requestBody:
+        description: User data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-swagger-router-controller: Default
+  /users/{userId}:
+    get:
+      summary: Get a user by ID
+      operationId: usersUserIdGET
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+      x-swagger-router-controller: Default
+    put:
+      summary: Update a user by ID
+      operationId: usersUserIdPUT
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: User data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+      x-swagger-router-controller: Default
+    delete:
+      summary: Delete a user by ID
+      operationId: usersUserIdDELETE
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: User deleted
+      x-swagger-router-controller: Default
+  /products:
+    get:
+      summary: Get all products
+      operationId: productsGET
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Create a new product
+      operationId: productsPOST
+      requestBody:
+        description: Product data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      x-swagger-router-controller: Default
+  /products/{productId}:
+    get:
+      summary: Get a product by ID
+      operationId: productsProductIdGET
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Product not found
+      x-swagger-router-controller: Default
+    put:
+      summary: Update a product by ID
+      operationId: productsProductIdPUT
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Product data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "200":
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Product not found
+      x-swagger-router-controller: Default
+    delete:
+      summary: Delete a product by ID
+      operationId: productsProductIdDELETE
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Product deleted
+      x-swagger-router-controller: Default
+  /orders:
+    get:
+      summary: Get all orders
+      operationId: ordersGET
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Create a new order
+      operationId: ordersPOST
+      requestBody:
+        description: Order data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "201":
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+      x-swagger-router-controller: Default
+  /orders/{orderId}:
+    get:
+      summary: Get an order by ID
+      operationId: ordersOrderIdGET
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: Order not found
+      x-swagger-router-controller: Default
+    put:
+      summary: Update an order by ID
+      operationId: ordersOrderIdPUT
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Order data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: Order not found
+      x-swagger-router-controller: Default
+  /orders/user/{user_id}:
+    get:
+      summary: Get orders for a specific user
+      operationId: ordersUserGET
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+                x-content-type: application/json
+        "404":
+          description: User not found
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+      example:
+        id: 0
+        email: email
+        username: username
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+      example:
+        price: 6.027456183070403
+        name: name
+        id: 0
+    OrderProduct:
+      type: object
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+      example:
+        quantity: 5
+        productId: 1
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+      example:
+        id: 0
+        userId: 6
+        products:
+        - quantity: 5
+          productId: 1
+        - quantity: 5
+          productId: 1
