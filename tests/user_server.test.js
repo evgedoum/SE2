@@ -17,21 +17,39 @@ test.after.always((t) => {
 });
 
 //____________________________________________________________________________________________
-test ('GET user by id', async (t) =>{
+// GET ALL USERS
+
+test ('GET users (SERVER)', async (t) => {
+    const { body ,statusCode } = await t.context.got("users",{throwHttpErrors: false});
+    t.is(statusCode, 200);
+    t.is(body.length,2);
+    functions.user_contain(t, body[0]);
+    functions.user_contain(t, body[1]);
+});
+
+//     ** We didn't find a way to check for a negative value to return a 404 error ** 
+//______________________________________________________________________________________________
+// GET USERS BY ID
+
+test ('GET user by id (SERVER)', async (t) => {
     const { body ,statusCode } = await t.context.got("users/0",{throwHttpErrors: false});
     t.is(statusCode, 200);
     functions.user_contain(t, body);
 });
 
+test ('GET user by unexisted id', async (t) => {
+    const { body ,statusCode } = await t.context.got("users/10",{throwHttpErrors: false});
+    t.not(body.id, 10);
+});
+
 test ('GET users wrong id number', async (t) => {
-    const { body ,statusCode } = await t.context.got("users/a",{throwHttpErrors: false}); 
-    console.log(body, statusCode);
+    const { body ,statusCode } = await t.context.got("users/a",{throwHttpErrors: false});
     t.is(body.message, 'request.params.userId should be integer');
     t.is(statusCode, 400);    
 });
 
 test ('GET users without specific id', async (t) => {
-    const { body ,statusCode } = await t.context.got("users",{throwHttpErrors: false}); 
+    const { body ,statusCode } = await t.context.got("users/",{throwHttpErrors: false}); 
     t.is(statusCode, 200);
     t.is(body.length,2);
     functions.user_contain(t, body[0]);
