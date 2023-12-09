@@ -340,6 +340,9 @@ components:
         id: 0
     OrderProduct:
       type: object
+      required:
+      - productId
+      - quantity
       properties:
         productId:
           type: integer
@@ -350,6 +353,9 @@ components:
         productId: 1
     Order:
       type: object
+      required:
+      - userId 
+      - products
       properties:
         id:
           type: integer
