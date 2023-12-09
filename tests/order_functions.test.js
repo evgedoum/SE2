@@ -46,3 +46,29 @@ test ('GET order by id without integer id', async t =>{
     const result = await ordersOrderIdGET('a');
     order_contain(t, result);
 });
+
+//-----------------------------------------------------------------------//
+//                              POST order                               //
+//-----------------------------------------------------------------------//
+
+test ('POST order', async t =>{
+  const requestBody = {
+      "id": 0,
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const result = await ordersPOST(requestBody);
+  order_contain(t, result);
+});
+
+//-----------------------------------------------------------------------//
+
