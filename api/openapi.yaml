@@ -365,6 +365,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderProduct'
+          minItems: 1
       example:
         id: 0
         userId: 6
