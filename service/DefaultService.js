@@ -315,6 +315,17 @@ exports.usersPOST = function(body) {
   "email" : "email",
   "username" : "username"
 };
+    //checks if email and username are valid
+    if(body.email.trim() === "" && body.username.trim() === ""){
+      reject("Error: email and username is not valid");
+    }
+    if(body.email.trim() === ""){
+      reject("Error: email is not valid");
+    }
+    if(body.username.trim() === ""){
+      resolve("Error: username is not valid");
+    }
+
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -331,8 +342,14 @@ exports.usersPOST = function(body) {
  * no response value expected for this operation
  **/
 exports.usersUserIdDELETE = function(userId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+      "id" : userId
+    };
+    return new Promise(function(resolve, reject) {
+      resolve({ 
+        message: "User deleted with ID: " + userId
+      });
   });
 }
 
