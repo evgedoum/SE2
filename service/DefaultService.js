@@ -317,13 +317,19 @@ exports.usersPOST = function(body) {
 };
     //checks if email and username are valid
     if(body.email.trim() === "" && body.username.trim() === ""){
-      reject("Error: email and username is not valid");
+      reject({
+        message: "Email and Username are not valid"
+      });
     }
     if(body.email.trim() === ""){
-      reject("Error: email is not valid");
+      reject({
+        message: "Email is not valid"
+      });
     }
     if(body.username.trim() === ""){
-      resolve("Error: username is not valid");
+      reject( {
+        message: "Username is not valid"
+      });
     }
 
     if (Object.keys(examples).length > 0) {
