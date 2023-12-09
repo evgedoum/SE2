@@ -36,3 +36,19 @@ test ('GET order by id without integer id', async (t) => {
     const result = await usersUserIdGET('a');
     user_contain(t, result);
 });
+
+//_____________________________________________________________
+// POST USERS 
+
+
+test ('POST users', async (t) => {
+  const requestBody = {
+    "id" : 0,
+    "email" : "email",
+    "username" : "username"
+    };
+  const result = await usersPOST(requestBody);
+  user_contain(t, result);
+});
+
+//-----------------------------------------------------------------------//
