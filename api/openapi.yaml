@@ -327,6 +327,9 @@ components:
         username: username
     Product:
       type: object
+      required:
+        - name
+        - price
       properties:
         id:
           type: integer
