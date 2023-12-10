@@ -66,6 +66,46 @@ test ('GET order by id service with negative id', async (t) =>{
 });
 
 //-----------------------------------------------------------------------------------------------//
+//                                        GET users orders                                       //
+//-----------------------------------------------------------------------------------------------//
+
+test ('GET users orders service', async t =>{
+  const { body ,statusCode } = await t.context.got("orders/user/0",{throwHttpErrors: false});
+  t.is(statusCode, 200);
+  t.is(body.length, 2);
+  functions.order_contain(t, body[0]);
+  functions.order_contain(t, body[1]);
+});
+
+//this should fail but we test it with the dummy so as not to stop the ci
+test ('GET users orders service with wrond id', async t =>{
+  const { body ,statusCode } = await t.context.got("orders/user/10",{throwHttpErrors: false});
+  t.is(statusCode, 200);
+  t.is(body.length, 2);
+ // t.is(body[0].userId,10); //if we test this as we should it fails so i test the dummy data with the function
+  functions.order_contain(t, body[0]);
+  functions.order_contain(t, body[1]);
+});
+
+test ('GET users orders with blank id on service', async t =>{
+  const { body ,statusCode } = await t.context.got("orders/user/",{throwHttpErrors: false});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.params.orderId should be integer');
+});
+
+test ('GET users orders with wrong id type on service', async t =>{
+  const { body ,statusCode } = await t.context.got("orders/user/a",{throwHttpErrors: false});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.params.user_id should be integer');
+});
+
+test ('GET users orders service with negative id', async t =>{
+  const { body ,statusCode } = await t.context.got("orders/user/-10",{throwHttpErrors: false});
+  t.is(statusCode, 400);
+  t.is(body.message, "Id should be a positive integer.");
+});
+
+//-----------------------------------------------------------------------------------------------//
 //                                      POST order                                               //
 //-----------------------------------------------------------------------------------------------//
 

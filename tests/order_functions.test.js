@@ -48,6 +48,31 @@ test ('GET order by id without integer id', async t =>{
 });
 
 //-----------------------------------------------------------------------//
+//                             GET users orders                          //
+//-----------------------------------------------------------------------//
+
+test ('GET users orders', async t =>{
+  const result = await ordersUserGET(0);
+  t.is(result.length,2);
+  order_contain(t, result[0]);
+  order_contain(t, result[1]);
+});
+
+test ('GET users orders without id', async t =>{
+const result = await ordersUserGET('');
+t.is(result.length,2);
+order_contain(t, result[0]);
+order_contain(t, result[1]);
+});
+
+test ('GET users orders without integer id', async t =>{
+const result = await ordersUserGET('a');
+t.is(result.length,2);
+order_contain(t, result[0]);
+order_contain(t, result[1]);
+});
+
+//-----------------------------------------------------------------------//
 //                              POST order                               //
 //-----------------------------------------------------------------------//
 
