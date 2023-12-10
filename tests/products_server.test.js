@@ -17,10 +17,10 @@ test.after.always((t) => {
 });
 
 //---------------------------------------------------------------------------
-//GET all products
+//GET /products
 
 
-test ('GET products (SERVER)', async (t) =>{
+test ('GET /products (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products");
     t.is(statusCode, 200);
     t.is(body.length, 2);
@@ -29,7 +29,7 @@ test ('GET products (SERVER)', async (t) =>{
 });
 
 //Make a GET request to the /products endpoint with an unexpeted random query.
-test ('GET products (SERVER): Bad request with random query', async (t) =>{
+test ('GET /products | Bad request with random query (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products?value=bad");
     t.is(statusCode, 400);
 });
@@ -37,14 +37,20 @@ test ('GET products (SERVER): Bad request with random query', async (t) =>{
 //---------------------------------------------------------------------------
 //GET product by ID
 
-test('GET productsd/{productId} (SERVER)', async (t) =>{
+test('GET /productsd/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/0");
     t.is(statusCode, 200);
     product_contain(t, body);
   });
 
-  test('GET productsd/{productId} | wrong argument type (SERVER)', async (t) =>{
+  test('GET /productsd/{productId} | wrong argument type (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/a");
     t.is(statusCode, 400);
     t.is(body.message, 'request.params.productId should be integer')
   });
+
+  test ('GET /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got("products/1?value=bad");
+    t.is(statusCode, 400);
+    t.is(body.message, "Unknown query parameter 'value'");
+});

@@ -8,7 +8,10 @@ function product_contain(t, product) {
   };
   module.exports =  {product_contain} ;
 
-test('GET products', async (t) =>{
+//---------------------------------------------------------------------------
+//Get /products
+
+test('GET /products', async (t) =>{
     const result = await productsGET();
     t.is(result.length, 2);
     product_contain(t, result[0]);
@@ -16,8 +19,9 @@ test('GET products', async (t) =>{
 });
 
 //---------------------------------------------------------------------------
+//Get /products/{productId}
 
-test('GET products/{productId}', async (t) =>{
+test('GET /products/{productId}', async (t) =>{
   const result = await productsProductIdGET(0);
   product_contain(t, result);
 });
