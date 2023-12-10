@@ -19,7 +19,7 @@ module.exports.ordersOrderIdGET = function ordersOrderIdGET (req, res, next, ord
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };
 

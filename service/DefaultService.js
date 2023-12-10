@@ -59,6 +59,11 @@ exports.ordersOrderIdGET = function(orderId) {
     "productId" : 1
   } ]
 };
+    if (orderId<0){
+      reject({
+        message: "Id should be a positive integer."
+      });
+    }
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

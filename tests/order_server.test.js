@@ -32,8 +32,6 @@ test ('GET orders service', async (t) => {
 //                                      GET orders by id                                         //
 //-----------------------------------------------------------------------------------------------//
 
-//We didn't find a way to check for a negative value to return a 404 error
-
 test ('GET order by id service', async (t) =>{
     const { body ,statusCode } = await t.context.got("orders/0",{throwHttpErrors: false});
     t.is(statusCode, 200);
@@ -59,6 +57,12 @@ test ('GET order fail wrong id type', async (t) =>{
     const { body ,statusCode } = await t.context.got("orders/a",{throwHttpErrors: false});
     t.is(statusCode, 400);
     t.is(body.message,"request.params.orderId should be integer");
+});
+
+test ('GET order by id service with negative id', async (t) =>{
+  const { body ,statusCode } = await t.context.got("orders/-10",{throwHttpErrors: false});
+  t.is(statusCode, 400);
+  t.is(body.message,"Id should be a positive integer.")
 });
 
 //-----------------------------------------------------------------------------------------------//
