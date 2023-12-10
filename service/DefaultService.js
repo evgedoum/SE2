@@ -162,6 +162,11 @@ exports.ordersUserGET = function(user_id) {
     "productId" : 1
   } ]
 } ];
+    if (user_id<0){
+      reject({
+      message: "Id should be a positive integer."
+      });
+    }
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

@@ -49,7 +49,7 @@ module.exports.ordersUserGET = function ordersUserGET (req, res, next, user_id) 
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };
 
