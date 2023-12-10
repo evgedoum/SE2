@@ -16,20 +16,35 @@ test.after.always((t) => {
     t.context.server.close();
 });
 
+//---------------------------------------------------------------------------
+//GET all products
 
-test ('GET products server', async (t) =>{
+
+test ('GET products (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products");
     t.is(statusCode, 200);
     t.is(body.length, 2);
     product_contain(t, body[0]);
     product_contain(t, body[1]);
-    
-    // console.log(statusCode);
-    console.log(body);
 });
 
 //Make a GET request to the /products endpoint with an unexpeted random query.
-test ('GET products server: Bad request with random query', async (t) =>{
+test ('GET products (SERVER): Bad request with random query', async (t) =>{
     const { body, statusCode } = await t.context.got("products?value=bad");
     t.is(statusCode, 400);
 });
+
+//---------------------------------------------------------------------------
+//GET product by ID
+
+test('GET productsd/{productId} (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got("products/0");
+    t.is(statusCode, 200);
+    product_contain(t, body);
+  });
+
+  test('GET productsd/{productId} | wrong argument type (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got("products/a");
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.params.productId should be integer')
+  });
