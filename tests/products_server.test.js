@@ -35,15 +35,15 @@ test ('GET /products | Bad request with random query (SERVER)', async (t) =>{
 });
 
 //---------------------------------------------------------------------------
-//GET product by ID
+//GET /product by ID
 
-test('GET /productsd/{productId} (SERVER)', async (t) =>{
+test('GET /products/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/0");
     t.is(statusCode, 200);
     product_contain(t, body);
   });
 
-  test('GET /productsd/{productId} | wrong argument type (SERVER)', async (t) =>{
+  test('GET /products/{productId} | wrong argument type (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/a");
     t.is(statusCode, 400);
     t.is(body.message, 'request.params.productId should be integer')
