@@ -54,3 +54,70 @@ test('GET /products/{productId} (SERVER)', async (t) =>{
     t.is(statusCode, 400);
     t.is(body.message, "Unknown query parameter 'value'");
 });
+
+//---------------------------------------------------------------------------
+//POST /product by ID
+
+test('POST /products (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 200);
+    product_contain(t, body);
+});
+
+test('POST /products | missing property "price" (SERVER)', async (t) =>{
+    request_body = {
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(body.message, "request.body should have required property 'price'");
+});
+
+test('POST /products | missing property "name" (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(body.message, "request.body should have required property 'name'");
+});
+
+test('POST /products | empty body (SERVER)', async (t) =>{
+    request_body = {};
+    const { body, statusCode } = await t.context.got.post("products", {json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property 'name', request.body should have required property 'price'");
+});
+
+test('POST /products | wrong "price" type (SERVER)', async (t) =>{
+    request_body = {
+        "price" : "6.027456183070403",
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.price should be number');
+});
+
+test('POST /products | wrong "name" type (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : 1024 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should be string');
+});
+
+test ('POST /products | Bad request with random query (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.post("products?value=bad",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, "Unknown query parameter 'value'");
+});
+

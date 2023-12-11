@@ -5,8 +5,8 @@ function product_contain(t, product) {
     t.is(product.price, 6.027456183070403);
     t.is(product.name, 'name');
     t.is(product.id, 0);
-  };
-  module.exports =  {product_contain} ;
+};
+module.exports =  {product_contain} ;
 
 //---------------------------------------------------------------------------
 //Get /products
@@ -23,5 +23,17 @@ test('GET /products', async (t) =>{
 
 test('GET /products/{productId}', async (t) =>{
   const result = await productsProductIdGET(0);
+  product_contain(t, result);
+});
+
+//---------------------------------------------------------------------------
+//POST /products
+
+test('POST /products', async (t) =>{
+  request_body = {
+    "price" : 6.027456183070403,
+    "name" : "name"
+  };
+  const result = await productsPOST(request_body);
   product_contain(t, result);
 });
