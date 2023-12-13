@@ -403,6 +403,33 @@ exports.usersUserIdPUT = function(body,userId) {
   "email" : "email",
   "username" : "username"
 };
+    if(body.id < 0) {
+      reject({
+        message: "UserId should be positive"
+      });
+    }
+    if(userId < 0) {
+      reject({
+        message: "UserId should be positive"
+      });
+    }
+    //checks if email and username are valid
+    if(body.email.trim() === "" && body.username.trim() === ""){
+      reject({
+        message: "Email and Username are not valid"
+      });
+    }
+    if(body.email.trim() === ""){
+      reject({
+        message: "Email is not valid"
+      });
+    }
+    if(body.username.trim() === ""){
+      reject( {
+        message: "Username is not valid"
+      });
+    }
+
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

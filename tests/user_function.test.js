@@ -1,5 +1,5 @@
 const test = require('ava');
-const { usersGET, usersUserIdGET, usersPOST } = require('../service/DefaultService');
+const { usersGET, usersUserIdGET, usersPOST, usersUserIdPUT} = require('../service/DefaultService');
 
 function user_contain(t, user) {
     t.is(user.id,0);
@@ -40,7 +40,6 @@ test ('GET order by id without integer id', async (t) => {
 //_____________________________________________________________
 // POST USERS 
 
-
 test ('POST users', async (t) => {
   const requestBody = {
     "id" : 0,
@@ -52,3 +51,14 @@ test ('POST users', async (t) => {
 });
 
 //-----------------------------------------------------------------------//
+// PUT USERS 
+
+test ('PUT users', async (t) => {
+  const requestBody = {
+    "id" : 0,
+    "email" : "email",
+    "username" : "username"
+    };
+  const result = await usersUserIdPUT(requestBody, 0);
+  user_contain(t, result);
+});

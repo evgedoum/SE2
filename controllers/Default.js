@@ -149,6 +149,6 @@ module.exports.usersUserIdPUT = function usersUserIdPUT (req, res, next, body, u
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };

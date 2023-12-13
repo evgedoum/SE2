@@ -205,3 +205,175 @@ test ('POST users without body (SERVER)', async (t) => {
     t.is(statusCode, 400);
     t.is(body.message, "request.body should have required property \'username\', request.body should have required property \'email\'");
 });
+
+//____________________________________________________________________________________________
+// PUT USERS
+
+test ('PUT users (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 200);
+    functions.user_contain(t, body);
+});
+
+test ('PUT users with wrong id type at URL(SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/a",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.params.userId should be integer");
+});
+
+test ('PUT users with negative id type (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : -1,
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "UserId should be positive");
+});
+
+test ('PUT users with negative id type in URL (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/-1",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "UserId should be positive");
+});
+
+test ('PUT users without id (SERVER)', async (t) => {
+    const requestBody = {
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 200);
+    functions.user_contain(t, body);
+});
+
+test ('PUT users empty email (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "Email is not valid");
+});
+
+test ('PUT users empty username (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email",
+        "username" : ""
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "Username is not valid");
+});
+
+test ('PUT users empty username and empty email (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "",
+        "username" : ""
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "Email and Username are not valid");
+});
+
+test ('PUT users wrong email type (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : 2,
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body.email should be string");
+});
+
+test ('PUT users wrong username type (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email",
+        "username" : 2
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body.username should be string");
+});
+
+test ('PUT users wrong username,email type (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : 2,
+        "username" : 2
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body.username should be string, request.body.email should be string");
+});
+
+test ('PUT users without email (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property \'email\'");
+});
+
+test ('PUT users without username (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0,
+        "email" : "email"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property \'username\'");
+});
+
+test ('PUT users without username and without email (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 0
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property \'username\', request.body should have required property \'email\'");
+});
+
+test ('PUT users without body (SERVER)', async (t) => {
+    const requestBody = {
+
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property \'username\', request.body should have required property \'email\'");
+});
+
+test ('PUT users with wrong id type(SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 'a',
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body.id should be integer");
+});
