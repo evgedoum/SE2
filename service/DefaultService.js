@@ -315,6 +315,11 @@ exports.usersPOST = function(body) {
   "email" : "email",
   "username" : "username"
 };
+    if(body.id < 0) {
+      reject({
+        message: "UserId should be positive"
+      });
+    }
     //checks if email and username are valid
     if(body.email.trim() === "" && body.username.trim() === ""){
       reject({

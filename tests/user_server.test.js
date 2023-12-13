@@ -70,6 +70,28 @@ test ('POST users (SERVER)', async (t) => {
     functions.user_contain(t, body);
 });
 
+test ('POST users with wrong id type (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : 'a',
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body.id should be integer");
+});
+
+test ('POST users with negative id (SERVER)', async (t) => {
+    const requestBody = {
+        "id" : -1,
+        "email" : "email",
+        "username" : "username"
+      };
+    const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
+    t.is(statusCode, 400);
+    t.is(body.message, "UserId should be positive");
+});
+
 test ('POST users without id (SERVER)', async (t) => {
     const requestBody = {
         "email" : "email",
