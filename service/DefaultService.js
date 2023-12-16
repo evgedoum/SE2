@@ -94,7 +94,29 @@ exports.ordersOrderIdPUT = function(body,orderId) {
     "productId" : 1
   } ]
 };
-    if (Object.keys(examples).length > 0) {
+      if (orderId<0){
+        reject({
+          message: "Id of order to change should be a positive integer."
+        });
+      }
+      if (body.id<0){
+        reject({
+          message: "Id should be a positive integer."
+        });
+      }
+      if (body.userId<0){
+        reject({
+          message: "UserId should be a positive integer."
+        });
+      }
+      for (let i=0; i<body.products.length; i++){
+        if (body.products[i].quantity<0){
+          reject({
+            message: "Quantity of a product can't be negative."
+          });
+        }
+      }
+      if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -123,6 +145,23 @@ exports.ordersPOST = function(body) {
     "productId" : 1
   } ]
 };
+    if (body.id<0){
+      reject({
+        message: "Id should be a positive integer."
+      });
+    }
+    if (body.userId<0){
+      reject({
+        message: "UserId should be a positive integer."
+      });
+    }
+    for (let i=0; i<body.products.length; i++){
+      if (body.products[i].quantity<0){
+        reject({
+          message: "Quantity of a product can't be negative."
+        });
+      }
+    }
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

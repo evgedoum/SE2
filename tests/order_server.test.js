@@ -128,6 +128,65 @@ test ('POST order service', async t =>{
     functions.order_contain(t, body);
 });
 
+test ('POST order service with wrong id type', async t =>{
+  const requestBody = {
+      "id": "a",
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"request.body.id should be integer");
+});
+
+test ('POST order service with negative id', async t =>{
+  const requestBody = {
+      "id":-5,
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"Id should be a positive integer.");
+});
+
+test ('POST order service with a negative quantity', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": -5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"Quantity of a product can't be negative.");
+});
+
 test ('POST order service without userId', async t =>{
     const requestBody = {
         "products": [
@@ -163,6 +222,25 @@ test ('POST order service with wrong userId type', async t =>{
     const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
     t.is(body.message,'request.body.userId should be integer');
+});
+
+test ('POST order service with negative UserId', async t =>{
+  const requestBody = {
+      "userId": -6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"UserId should be a positive integer.");
 });
 
 test ('POST order service without any product', async t =>{
@@ -235,4 +313,255 @@ test ('POST order service with blank body', async t =>{
     t.is(statusCode, 400);
     t.is(body.message, 'request.body should have required property \'userId\', request.body should have required property \'products\'');
 });
+
+//-----------------------------------------------------------------------------------------------//
+//                                       PUT order                                               //
+//-----------------------------------------------------------------------------------------------//
+
+
+test ('PUT order service', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 200);
+  functions.order_contain(t, body);
+});
+
+test ('PUT order service with negative user id', async t =>{
+  const requestBody = {
+      "userId": - 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "UserId should be a positive integer.")
+});
+
+test ('PUT order service with negative id', async t =>{
+  const requestBody = {
+      "id":-10,
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "Id should be a positive integer.")
+});
+
+
+test ('PUT order service with wrong id type', async t =>{
+  const requestBody = {
+      "id": "a",
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.body.id should be integer")
+});
+
+test ('PUT order service with negative id on URL', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/-10",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "Id of order to change should be a positive integer.")
+});
+
+test ('PUT order service with negative quantity', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity":-5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"Quantity of a product can't be negative.");
+});
+
+test ('PUT order service with wrong id type on URL', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/a",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"request.params.orderId should be integer");
+});
+
+test ('PUT order service without userId', async t =>{
+  const requestBody = {
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,"request.body should have required property 'userId'");
+});
+
+test ('PUT order service with wrong userId type', async t =>{
+  const requestBody = {
+      "userId": "userId",
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,'request.body.userId should be integer');
+});
+
+test ('PUT order service without any product', async t =>{
+  const requestBody = {
+      "userId": 6
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message,'request.body should have required property \'products\'');
+});
+
+test ('PUT order service with empty products', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.body.products should NOT have fewer than 1 items');
+});
+
+test ('PUT order service without productId', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.body.products[0] should have required property \'productId\'');
+});
+
+test ('PUT order service without quantity', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": [
+        {
+          "productId": 1
+        }
+      ]
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.body.products[0] should have required property \'quantity\'');
+});
+
+test ('PUT order service without list of products ', async t =>{
+  const requestBody = {
+      "userId": 6,
+      "products": 
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.body.products should be array');
+});
+
+test ('PUT order service with blank body', async t =>{
+  const requestBody = {
+    };
+  const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.body should have required property \'userId\', request.body should have required property \'products\'');
+});
+
+
 //-----------------------------------------------------------------------------------------------//

@@ -3,6 +3,7 @@ const { ordersGET } = require('../service/DefaultService');
 const { ordersOrderIdGET } = require('../service/DefaultService');
 const { ordersUserGET } = require('../service/DefaultService');
 const { ordersPOST } = require('../service/DefaultService');
+const { ordersOrderIdPUT } = require('../service/DefaultService');
 
 function order_contain(t, order) {
     // tests for the items that returns the get orders
@@ -92,6 +93,29 @@ test ('POST order', async t =>{
       ]
     };
   const result = await ordersPOST(requestBody);
+  order_contain(t, result);
+});
+
+//-----------------------------------------------------------------------//
+//                               PUT order                               //
+//-----------------------------------------------------------------------//
+
+test ('PUT order', async t =>{
+  const requestBody = {
+      "id": 0,
+      "userId": 6,
+      "products": [
+        {
+          "quantity": 5,
+          "productId": 1
+        },
+        {
+          "quantity": 5,
+          "productId": 1
+        }
+      ]
+    };
+  const result = await ordersOrderIdPUT(requestBody,0);
   order_contain(t, result);
 });
 

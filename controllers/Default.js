@@ -29,7 +29,7 @@ module.exports.ordersOrderIdPUT = function ordersOrderIdPUT (req, res, next, bod
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };
 
@@ -39,7 +39,7 @@ module.exports.ordersPOST = function ordersPOST (req, res, next, body) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };
 
