@@ -55,6 +55,21 @@ test('GET /products/{productId} (SERVER)', async (t) =>{
     t.is(body.message, "Unknown query parameter 'value'");
 });
 
+test('GET /products/{productId} | productID < 0 (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got("products/-1");
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.params.productId should be >= 0')
+});
+
+  //_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED PRODUCT BECAUSE WE DONT HAVE A DATABASE ** //
+
+// test ('GET /products/{productId} | productId unexisted (SERVER)', async (t) => {
+//     const { body ,statusCode } = await t.context.got("products/10",{throwHttpErrors: false});
+//     t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
+
 //---------------------------------------------------------------------------
 //POST /products
 
@@ -119,6 +134,36 @@ test ('POST /products | Bad request with random query (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.post("products?value=bad",{json: request_body});
     t.is(statusCode, 400);
     t.is(body.message, "Unknown query parameter 'value'");
+});
+
+test('POST /products | negative price (SERVER)', async (t) =>{
+    request_body = {
+        "price" : -6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.price should be >= 0');
+});
+
+test('POST /products | name length < 3 (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "no" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should NOT be shorter than 3 characters');
+});
+
+test('POST /products | name length < 3 && negative price (SERVER)', async (t) =>{
+    request_body = {
+        "price" : -6.027456183070403,
+        "name" : "no" 
+    };
+    const { body, statusCode } = await t.context.got.post("products",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should NOT be shorter than 3 characters, request.body.price should be >= 0');
 });
 
 //---------------------------------------------------------------------------
@@ -187,22 +232,90 @@ test ('PUT /products/{productID} | Bad request with random query (SERVER)', asyn
     t.is(body.message, "Unknown query parameter 'value'");
 });
 
+test('PUT /products/{productID} | productID < 0 (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/-1",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.params.productId should be >= 0');
+});
+
+test('PUT /products/{productID} | negative price (SERVER)', async (t) =>{
+    request_body = {
+        "price" : -6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.price should be >= 0');
+});
+
+test('PUT /products/{productID} | name length < 3 (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "no" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should NOT be shorter than 3 characters');
+});
+
+test('PUT /products/{productID} | name length < 3 && negative price (SERVER)', async (t) =>{
+    request_body = {
+        "price" : -6.027456183070403,
+        "name" : "no" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should NOT be shorter than 3 characters, request.body.price should be >= 0');
+});
+
+//_______________________________________________________________________________________________
+//  ** WE CANNOT TEST THE UNEXISTED PRODUCT BECAUSE WE DONT HAVE A DATABASE ** //
+
+//  test ('PUT /products/{productId} | productId unexisted (SERVER)', async (t) => {
+//     request_body = {
+//         "price" : 6.027456183070403,
+//         "name" : "name" 
+//     };
+//     const { body, statusCode } = await t.context.got.put("products/10",{json: request_body});
+//     t.is(statusCode, 400);
+//  });
+//_______________________________________________________________________________________________
+
 //---------------------------------------------------------------------------
 //DELETE /products/{productId}
 
 test('DELETE /products/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.delete("products/0");
     t.is(statusCode, 200);
-  });
+});
 
-  test('DELETE /products/{productId} | wrong argument type (SERVER)', async (t) =>{
+test('DELETE /products/{productId} | wrong argument type (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.delete("products/a");
     t.is(statusCode, 400);
     t.is(body.message, 'request.params.productId should be integer')
-  });
+});
 
-  test ('DELETE /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
+test ('DELETE /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.delete("products/1?value=bad");
     t.is(statusCode, 400);
     t.is(body.message, "Unknown query parameter 'value'");
 });
+
+test('DELETE /products/{productId} | productID < 0 (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got.delete("products/-1");
+    t.is(statusCode, 400);
+
+});
+
+//_______________________________________________________________________________________________
+//  ** WE CANNOT TEST THE UNEXISTED PRODUCT BECAUSE WE DONT HAVE A DATABASE ** //
+
+// test ('DELETE /products/{productId} | productId unexisted (SERVER)', async (t) => {
+// const { body, statusCode } = await t.context.got.delete("products/10",{json: request_body});
+// t.is(statusCode, 400);
+// });
+//_______________________________________________________________________________________________
