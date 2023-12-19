@@ -36,10 +36,14 @@ test ('GET user by id (SERVER)', async (t) => {
     functions.user_contain(t, body);
 });
 
-test ('GET user by unexisted id', async (t) => {
-    const { body ,statusCode } = await t.context.got("users/10",{throwHttpErrors: false});
-    t.not(body.id, 10);
-});
+//_______________________________________________________________________________________________
+//  ** WE CANNOT TEST THE UNEXISTED USER BECAUSE WE DONT HAVE A DATABASE ** //
+
+// test ('GET user by unexisted id', async (t) => {
+//     const { body ,statusCode } = await t.context.got("users/10",{throwHttpErrors: false});
+//     t.is(statusCode, 400);
+// });
+//_______________________________________________________________________________________________
 
 test ('GET user with negative id', async (t) => {
   const { body ,statusCode } = await t.context.got("users/-10",{throwHttpErrors: false});
@@ -282,6 +286,20 @@ test ('PUT users without id (SERVER)', async (t) => {
     functions.user_contain(t, body);
 });
 
+//_______________________________________________________________________________________________
+//  ** WE CANNOT TEST THE UNEXISTED USER BECAUSE WE DONT HAVE A DATABASE ** //
+
+// test ('PUT user with unexisted id', async (t) => {
+//     const requestBody = {
+//        "id" : 10,
+//        "email" : "email@example.com",
+//        "username" : "username"
+//      };
+//     const { body ,statusCode } = await t.context.got.put("users/10",{throwHttpErrors: false, json: requestBody});
+//     t.is(statusCode, 400);
+// });
+//_______________________________________________________________________________________________
+
 test ('PUT users with empty email (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
@@ -428,12 +446,14 @@ test ('DELETE user by id (SERVER)', async (t) => {
   t.is(body.message, 'User deleted with ID: 0');
 });
 
-test ('DELETE user by unexisted id', async (t) => {
-  const { body ,statusCode } = await t.context.got.delete("users/10",{throwHttpErrors: false});
-  //we should test t.is(body.id, 10) but we use mock server with dumy data and we dont want to fail
-  t.not(body.id, 10);
-  t.is(body.message, 'User deleted with ID: 10');
-});
+//_______________________________________________________________________________________________
+//  ** WE CANNOT TEST THE UNEXISTED USER BECAUSE WE DONT HAVE A DATABASE ** //
+
+// test ('DELETE user with unexisted id', async (t) => {
+//     const { body ,statusCode } = await t.context.got.delete("users/10",{throwHttpErrors: false});
+//     t.is(statusCode, 400);
+// });
+//_______________________________________________________________________________________________
 
 test ('DELETE users with wrong id number', async (t) => {
   const { body ,statusCode } = await t.context.got.delete("users/a",{throwHttpErrors: false});
