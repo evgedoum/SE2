@@ -315,6 +315,12 @@ exports.usersPOST = function(body) {
   "email" : "email",
   "username" : "username"
 };
+    if(body.id < 0) {
+      reject({
+        message: "UserId should be positive"
+      });
+    }
+
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -331,8 +337,14 @@ exports.usersPOST = function(body) {
  * no response value expected for this operation
  **/
 exports.usersUserIdDELETE = function(userId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+      "id" : userId
+    };
+    return new Promise(function(resolve, reject) {
+      resolve({ 
+        message: "User deleted with ID: " + userId
+      });
   });
 }
 
