@@ -51,6 +51,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "200":
           description: Successful operation
@@ -72,6 +73,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       requestBody:
         description: User data
         content:
@@ -100,6 +102,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "204":
           description: User deleted
@@ -320,10 +323,13 @@ components:
       properties:
         id:
           type: integer
+          minimum: 0
         username:
           type: string
+          minLength: 3
         email:
           type: string
+          format: email
       example:
         id: 0
         email: email
