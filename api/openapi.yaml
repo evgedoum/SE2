@@ -149,6 +149,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "200":
           description: Successful operation
@@ -170,6 +171,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       requestBody:
         description: Product data
         content:
@@ -198,6 +200,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "204":
           description: Product deleted
@@ -333,10 +336,13 @@ components:
       properties:
         id:
           type: integer
+          minimum: 0
         name:
           type: string
+          minLength: 3
         price:
           type: number
+          minimum: 0
       example:
         price: 6.027456183070403
         name: name
