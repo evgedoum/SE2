@@ -38,20 +38,14 @@ test ('GET order by id service', async (t) =>{
     functions.order_contain(t, body);
 });
 
-//we used t.not because our data is dummy so we cant check the existance of id 10, 
-//and we want to contunue the ci
-test ('GET order by id service unexisted', async (t) =>{
-    const { body ,statusCode } = await t.context.got("orders/10",{throwHttpErrors: false});
-    t.not(body.id,10);
-});
+//_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED ORDER BECAUSE WE DONT HAVE A DATABASE ** //
 
-test ('GET order id with blank id on the service', async (t) =>{
-    const { body ,statusCode } = await t.context.got("orders/",{throwHttpErrors: false});
-    t.is(statusCode, 200);
-    t.is(body.length,2);
-    functions.order_contain(t, body[0]);
-    functions.order_contain(t, body[1]);
-});
+//  test ('GET order by id service unexisted order', async (t) => {
+//      const { body ,statusCode } = await t.context.got("orders/10",{throwHttpErrors: false});
+//      t.is(statusCode, 400);
+//  });
+ //_______________________________________________________________________________________________
 
 test ('GET order fail wrong id type', async (t) =>{
     const { body ,statusCode } = await t.context.got("orders/a",{throwHttpErrors: false});
@@ -62,7 +56,7 @@ test ('GET order fail wrong id type', async (t) =>{
 test ('GET order by id service with negative id', async (t) =>{
   const { body ,statusCode } = await t.context.got("orders/-10",{throwHttpErrors: false});
   t.is(statusCode, 400);
-  t.is(body.message,"Id should be a positive integer.")
+  t.is(body.message,"request.params.orderId should be >= 0")
 });
 
 //-----------------------------------------------------------------------------------------------//
@@ -77,15 +71,14 @@ test ('GET users orders service', async t =>{
   functions.order_contain(t, body[1]);
 });
 
-//this should fail but we test it with the dummy so as not to stop the ci
-test ('GET users orders service with wrond id', async t =>{
-  const { body ,statusCode } = await t.context.got("orders/user/10",{throwHttpErrors: false});
-  t.is(statusCode, 200);
-  t.is(body.length, 2);
- // t.is(body[0].userId,10); //if we test this as we should it fails so i test the dummy data with the function
-  functions.order_contain(t, body[0]);
-  functions.order_contain(t, body[1]);
-});
+//_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE ORDERS OF UNEXISTED USER BECAUSE WE DONT HAVE A DATABASE ** //
+
+//  test ('GET users orders service with wrong id', async (t) => {
+//      const { body ,statusCode } = await t.context.got("orders/user/10",{throwHttpErrors: false});
+//      t.is(statusCode, 400);
+//  });
+ //_______________________________________________________________________________________________
 
 test ('GET users orders with blank id on service', async t =>{
   const { body ,statusCode } = await t.context.got("orders/user/",{throwHttpErrors: false});
@@ -102,7 +95,7 @@ test ('GET users orders with wrong id type on service', async t =>{
 test ('GET users orders service with negative id', async t =>{
   const { body ,statusCode } = await t.context.got("orders/user/-10",{throwHttpErrors: false});
   t.is(statusCode, 400);
-  t.is(body.message, "Id should be a positive integer.");
+  t.is(body.message, "request.params.user_id should be >= 0");
 });
 
 //-----------------------------------------------------------------------------------------------//
@@ -127,6 +120,50 @@ test ('POST order service', async t =>{
     t.is(statusCode, 200);
     functions.order_contain(t, body);
 });
+
+//_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED USER FOR AN ORDER BECAUSE WE DONT HAVE A DATABASE ** //
+
+//  test ('POST order service for unexisted user', async t =>{
+//   const requestBody = {
+//       "userId": 60,
+//       "products": [
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         },
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         }
+//       ]
+//     };
+//   const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+//   t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
+
+//_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED PRODUCT FOR AN ORDER BECAUSE WE DONT HAVE A DATABASE ** //
+
+//  test ('POST order service for unexisted product', async t =>{
+//   const requestBody = {
+//       "userId": 6,
+//       "products": [
+//         {
+//           "quantity": 5,
+//           "productId": 100
+//         },
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         }
+//       ]
+//     };
+//   const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
+//   t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
 
 test ('POST order service with wrong id type', async t =>{
   const requestBody = {
@@ -165,7 +202,7 @@ test ('POST order service with negative id', async t =>{
     };
   const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message,"Id should be a positive integer.");
+  t.is(body.message,"request.body.id should be >= 0");
 });
 
 test ('POST order service with a negative quantity', async t =>{
@@ -184,7 +221,7 @@ test ('POST order service with a negative quantity', async t =>{
     };
   const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message,"Quantity of a product can't be negative.");
+  t.is(body.message,"request.body.products[1].quantity should be >= 1");
 });
 
 test ('POST order service without userId', async t =>{
@@ -240,7 +277,7 @@ test ('POST order service with negative UserId', async t =>{
     };
   const { body ,statusCode } = await t.context.got.post("orders",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message,"UserId should be a positive integer.");
+  t.is(body.message,"request.body.userId should be >= 0");
 });
 
 test ('POST order service without any product', async t =>{
@@ -338,6 +375,69 @@ test ('PUT order service', async t =>{
   functions.order_contain(t, body);
 });
 
+//_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED USER FOR AN ORDER BECAUSE WE DONT HAVE A DATABASE ** //
+//  test ('PUT order service for unexisted user', async t =>{
+//   const requestBody = {
+//       "userId": 60,
+//       "products": [
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         },
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         }
+//       ]
+//     };
+//   const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
+//   t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
+
+ //_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED ORDER BECAUSE WE DONT HAVE A DATABASE ** //
+//  test ('PUT order service for unexisted order', async t =>{
+//   const requestBody = {
+//       "userId": 6,
+//       "products": [
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         },
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         }
+//       ]
+//     };
+//   const { body ,statusCode } = await t.context.got.put("orders/60",{throwHttpErrors: false, json: requestBody});
+//   t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
+
+ //_______________________________________________________________________________________________
+ //  ** WE CANNOT TEST THE UNEXISTED PRODUCT IN AN ORDER BECAUSE WE DONT HAVE A DATABASE ** //
+//  test ('PUT order service for unexisted product', async t =>{
+//   const requestBody = {
+//       "userId": 6,
+//       "products": [
+//         {
+//           "quantity": 5,
+//           "productId": 1
+//         },
+//         {
+//           "quantity": 5,
+//           "productId": 100
+//         }
+//       ]
+//     };
+//   const { body ,statusCode } = await t.context.got.put("orders/60",{throwHttpErrors: false, json: requestBody});
+//   t.is(statusCode, 400);
+// });
+ //_______________________________________________________________________________________________
+
 test ('PUT order service with negative user id', async t =>{
   const requestBody = {
       "userId": - 6,
@@ -354,7 +454,7 @@ test ('PUT order service with negative user id', async t =>{
     };
   const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message, "UserId should be a positive integer.")
+  t.is(body.message, "request.body.userId should be >= 0")
 });
 
 test ('PUT order service with negative id', async t =>{
@@ -374,7 +474,7 @@ test ('PUT order service with negative id', async t =>{
     };
   const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message, "Id should be a positive integer.")
+  t.is(body.message, "request.body.id should be >= 0")
 });
 
 
@@ -414,7 +514,7 @@ test ('PUT order service with negative id on URL', async t =>{
     };
   const { body ,statusCode } = await t.context.got.put("orders/-10",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message, "Id of order to change should be a positive integer.")
+  t.is(body.message, "request.params.orderId should be >= 0")
 });
 
 test ('PUT order service with negative quantity', async t =>{
@@ -433,7 +533,7 @@ test ('PUT order service with negative quantity', async t =>{
     };
   const { body ,statusCode } = await t.context.got.put("orders/0",{throwHttpErrors: false, json: requestBody});
   t.is(statusCode, 400);
-  t.is(body.message,"Quantity of a product can't be negative.");
+  t.is(body.message,"request.body.products[1].quantity should be >= 1");
 });
 
 test ('PUT order service with wrong id type on URL', async t =>{

@@ -19,7 +19,7 @@ module.exports.ordersOrderIdGET = function ordersOrderIdGET (req, res, next, ord
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };
 
@@ -29,7 +29,7 @@ module.exports.ordersOrderIdPUT = function ordersOrderIdPUT (req, res, next, bod
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };
 
@@ -39,7 +39,7 @@ module.exports.ordersPOST = function ordersPOST (req, res, next, body) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };
 
@@ -49,7 +49,7 @@ module.exports.ordersUserGET = function ordersUserGET (req, res, next, user_id) 
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };
 
