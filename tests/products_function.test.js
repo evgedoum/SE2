@@ -37,3 +37,15 @@ test('POST /products', async (t) =>{
   const result = await productsPOST(request_body);
   product_contain(t, result);
 });
+
+//---------------------------------------------------------------------------
+//PUT /products
+
+test('PUT /products/{productId}', async (t) =>{
+  request_body = {
+    "price" : 6.027456183070403,
+    "name" : "name"
+  };
+  const result = await productsProductIdPUT(request_body, 0);
+  product_contain(t, result);
+});

@@ -35,7 +35,7 @@ test ('GET /products | Bad request with random query (SERVER)', async (t) =>{
 });
 
 //---------------------------------------------------------------------------
-//GET /product by ID
+//GET /products/{productId}
 
 test('GET /products/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/0");
@@ -56,7 +56,7 @@ test('GET /products/{productId} (SERVER)', async (t) =>{
 });
 
 //---------------------------------------------------------------------------
-//POST /product by ID
+//POST /products
 
 test('POST /products (SERVER)', async (t) =>{
     request_body = {
@@ -121,3 +121,68 @@ test ('POST /products | Bad request with random query (SERVER)', async (t) =>{
     t.is(body.message, "Unknown query parameter 'value'");
 });
 
+//---------------------------------------------------------------------------
+//PUT /products/{productID}
+
+test('PUT /product/{productID} (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 200);
+    product_contain(t, body);
+});
+
+test('PUT /products/{productID} | missing property "price" (SERVER)', async (t) =>{
+    request_body = {
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(body.message, "request.body should have required property 'price'");
+});
+
+test('PUT /products/{productID} | missing property "name" (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(body.message, "request.body should have required property 'name'");
+});
+
+test('PUT /products/{productID} | empty body (SERVER)', async (t) =>{
+    request_body = {};
+    const { body, statusCode } = await t.context.got.put("products/0", {json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, "request.body should have required property 'name', request.body should have required property 'price'");
+});
+
+test('PUT /products/{productID} | wrong "price" type (SERVER)', async (t) =>{
+    request_body = {
+        "price" : "6.027456183070403",
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.price should be number');
+});
+
+test('PUT /products/{productID} | wrong "name" type (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : 1024 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.body.name should be string');
+});
+
+test ('PUT /products/{productID} | Bad request with random query (SERVER)', async (t) =>{
+    request_body = {
+        "price" : 6.027456183070403,
+        "name" : "name" 
+    };
+    const { body, statusCode } = await t.context.got.put("products/0?value=bad",{json: request_body});
+    t.is(statusCode, 400);
+    t.is(body.message, "Unknown query parameter 'value'");
+});
