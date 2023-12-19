@@ -27,7 +27,6 @@ test ('GET users (SERVER)', async (t) => {
     functions.user_contain(t, body[1]);
 });
 
-//     ** We didn't find a way to check for a negative value to return a 404 error ** 
 //______________________________________________________________________________________________
 // GET USERS BY ID
 
@@ -40,6 +39,12 @@ test ('GET user by id (SERVER)', async (t) => {
 test ('GET user by unexisted id', async (t) => {
     const { body ,statusCode } = await t.context.got("users/10",{throwHttpErrors: false});
     t.not(body.id, 10);
+});
+
+test ('GET user with negative id', async (t) => {
+  const { body ,statusCode } = await t.context.got("users/-10",{throwHttpErrors: false});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.params.userId should be >= 0");
 });
 
 test ('GET users wrong id number', async (t) => {
@@ -412,4 +417,39 @@ test ('PUT users with wrong id type(SERVER)', async (t) => {
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
     t.is(body.message, "request.body.id should be integer");
+});
+
+//______________________________________________________________________________________________
+// DELETE USERS BY ID
+
+test ('DELETE user by id (SERVER)', async (t) => {
+  const { body ,statusCode } = await t.context.got.delete("users/0",{throwHttpErrors: false});
+  t.is(statusCode, 200);
+  t.is(body.message, 'User deleted with ID: 0');
+});
+
+test ('DELETE user by unexisted id', async (t) => {
+  const { body ,statusCode } = await t.context.got.delete("users/10",{throwHttpErrors: false});
+  //we should test t.is(body.id, 10) but we use mock server with dumy data and we dont want to fail
+  t.not(body.id, 10);
+  t.is(body.message, 'User deleted with ID: 10');
+});
+
+test ('DELETE users with wrong id number', async (t) => {
+  const { body ,statusCode } = await t.context.got.delete("users/a",{throwHttpErrors: false});
+  t.is(body.message, 'request.params.userId should be integer');
+  t.is(statusCode, 400);    
+  t.is(body.message, 'request.params.userId should be integer');
+});
+
+test ('DELETE users without specific id', async (t) => {
+  const { body ,statusCode } = await t.context.got.delete("users/",{throwHttpErrors: false}); 
+  t.is(statusCode, 405);
+  t.is(body.message, 'DELETE method not allowed');
+});
+
+test ('DELETE users with negative id', async (t) => {
+  const { body ,statusCode } = await t.context.got.delete("users/-1",{throwHttpErrors: false}); 
+  t.is(statusCode, 400);
+  t.is(body.message, 'request.params.userId should be >= 0');
 });

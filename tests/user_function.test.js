@@ -1,5 +1,5 @@
 const test = require('ava');
-const { usersGET, usersUserIdGET, usersPOST, usersUserIdPUT} = require('../service/DefaultService');
+const { usersGET, usersUserIdGET, usersPOST, usersUserIdPUT, usersUserIdDELETE} = require('../service/DefaultService');
 
 function user_contain(t, user) {
     t.is(user.id,0);
@@ -61,4 +61,23 @@ test ('PUT users', async (t) => {
     };
   const result = await usersUserIdPUT(requestBody, 0);
   user_contain(t, result);
+});
+
+//_____________________________________________________________
+// DELETE USERS BY ID
+
+test ('DELETE user by id', async (t) => {
+  const result = await usersUserIdDELETE('0');
+  t.is(result.message, 'User deleted with ID: 0');
+});
+
+//?
+test ('DELETE users by id without id', async (t) => {
+  const result = await usersUserIdDELETE('');
+  t.is(result.message, 'User deleted with ID: ');
+});
+
+test ('DELETE order by id without integer id', async (t) => {
+  const result = await usersUserIdDELETE('a');
+  t.is(result.message, 'User deleted with ID: a');
 });
