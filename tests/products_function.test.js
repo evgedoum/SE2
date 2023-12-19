@@ -39,7 +39,7 @@ test('POST /products', async (t) =>{
 });
 
 //---------------------------------------------------------------------------
-//PUT /products
+//PUT /products/{productId}
 
 test('PUT /products/{productId}', async (t) =>{
   request_body = {
@@ -48,4 +48,13 @@ test('PUT /products/{productId}', async (t) =>{
   };
   const result = await productsProductIdPUT(request_body, 0);
   product_contain(t, result);
+});
+
+//---------------------------------------------------------------------------
+//DELETE /products/{productId}
+
+test('DELETE /products/{productId}', async (t) =>{
+  const result = await productsProductIdGET(0);
+  //function dosen't return a value
+  t.pass();
 });

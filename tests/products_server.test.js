@@ -186,3 +186,23 @@ test ('PUT /products/{productID} | Bad request with random query (SERVER)', asyn
     t.is(statusCode, 400);
     t.is(body.message, "Unknown query parameter 'value'");
 });
+
+//---------------------------------------------------------------------------
+//DELETE /products/{productId}
+
+test('DELETE /products/{productId} (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got.delete("products/0");
+    t.is(statusCode, 200);
+  });
+
+  test('DELETE /products/{productId} | wrong argument type (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got.delete("products/a");
+    t.is(statusCode, 400);
+    t.is(body.message, 'request.params.productId should be integer')
+  });
+
+  test ('DELETE /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
+    const { body, statusCode } = await t.context.got.delete("products/1?value=bad");
+    t.is(statusCode, 400);
+    t.is(body.message, "Unknown query parameter 'value'");
+});
