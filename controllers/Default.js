@@ -119,7 +119,7 @@ module.exports.usersPOST = function usersPOST (req, res, next, body) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };
 
@@ -149,6 +149,6 @@ module.exports.usersUserIdPUT = function usersUserIdPUT (req, res, next, body, u
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response, 400);
+      utils.writeJson(res, response);
     });
 };

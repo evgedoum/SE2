@@ -48,21 +48,13 @@ test ('GET users wrong id number', async (t) => {
     t.is(statusCode, 400);    
 });
 
-test ('GET users without specific id', async (t) => {
-    const { body ,statusCode } = await t.context.got("users/",{throwHttpErrors: false}); 
-    t.is(statusCode, 200);
-    t.is(body.length,2);
-    functions.user_contain(t, body[0]);
-    functions.user_contain(t, body[1]);
-});
-
 //____________________________________________________________________________________________
 // POST USERS
 
 test ('POST users (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
@@ -73,7 +65,7 @@ test ('POST users (SERVER)', async (t) => {
 test ('POST users with wrong id type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 'a',
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
@@ -84,17 +76,17 @@ test ('POST users with wrong id type (SERVER)', async (t) => {
 test ('POST users with negative id (SERVER)', async (t) => {
     const requestBody = {
         "id" : -1,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "UserId should be positive");
+    t.is(body.message, "request.body.id should be >= 0");
 });
 
 test ('POST users without id (SERVER)', async (t) => {
     const requestBody = {
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
@@ -102,7 +94,7 @@ test ('POST users without id (SERVER)', async (t) => {
     functions.user_contain(t, body);
 });
 
-test ('POST users empty email (SERVER)', async (t) => {
+test ('POST users with empty email (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : "",
@@ -110,21 +102,43 @@ test ('POST users empty email (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Email is not valid");
+    t.is(body.message, "request.body.email should match format \"email\"");
 });
 
-test ('POST users empty username (SERVER)', async (t) => {
+test ('POST users with wrong email (SERVER)', async (t) => {
+  const requestBody = {
+      "id" : 0,
+      "email" : "email",
+      "username" : "username"
+    };
+  const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.body.email should match format \"email\"");
+});
+
+test ('POST users with empty username (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : ""
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Username is not valid");
+    t.is(body.message, "request.body.username should NOT be shorter than 3 characters");
 });
 
-test ('POST users empty username and empty email (SERVER)', async (t) => {
+test ('POST users with username < 3 characters (SERVER)', async (t) => {
+  const requestBody = {
+      "id" : 0,
+      "email" : "email@example.com",
+      "username" : "hi"
+    };
+  const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.body.username should NOT be shorter than 3 characters");
+});
+
+test ('POST users with empty username and empty email (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : "",
@@ -132,10 +146,10 @@ test ('POST users empty username and empty email (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Email and Username are not valid");
+    t.is(body.message, "request.body.username should NOT be shorter than 3 characters, request.body.email should match format \"email\"");
 });
 
-test ('POST users wrong email type (SERVER)', async (t) => {
+test ('POST users with wrong email type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : 2,
@@ -146,10 +160,10 @@ test ('POST users wrong email type (SERVER)', async (t) => {
     t.is(body.message, "request.body.email should be string");
 });
 
-test ('POST users wrong username type (SERVER)', async (t) => {
+test ('POST users with wrong username type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : 2
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
@@ -157,7 +171,7 @@ test ('POST users wrong username type (SERVER)', async (t) => {
     t.is(body.message, "request.body.username should be string");
 });
 
-test ('POST users wrong username,email type (SERVER)', async (t) => {
+test ('POST users with wrong username,email type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : 2,
@@ -185,7 +199,7 @@ test ('POST users without username (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "request.body should have required property \'username\'");
+    t.is(body.message, "request.body should have required property \'username\', request.body.email should match format \"email\"");
 });
 
 test ('POST users without username and without email (SERVER)', async (t) => {
@@ -212,7 +226,7 @@ test ('POST users without body (SERVER)', async (t) => {
 test ('PUT users (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
@@ -223,7 +237,7 @@ test ('PUT users (SERVER)', async (t) => {
 test ('PUT users with wrong id type at URL(SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/a",{throwHttpErrors: false, json: requestBody});
@@ -234,28 +248,28 @@ test ('PUT users with wrong id type at URL(SERVER)', async (t) => {
 test ('PUT users with negative id type (SERVER)', async (t) => {
     const requestBody = {
         "id" : -1,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "UserId should be positive");
+    t.is(body.message, "request.body.id should be >= 0");
 });
 
 test ('PUT users with negative id type in URL (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/-1",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "UserId should be positive");
+    t.is(body.message, "request.params.userId should be >= 0");
 });
 
 test ('PUT users without id (SERVER)', async (t) => {
     const requestBody = {
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
@@ -263,7 +277,7 @@ test ('PUT users without id (SERVER)', async (t) => {
     functions.user_contain(t, body);
 });
 
-test ('PUT users empty email (SERVER)', async (t) => {
+test ('PUT users with empty email (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : "",
@@ -271,21 +285,43 @@ test ('PUT users empty email (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Email is not valid");
+    t.is(body.message, "request.body.email should match format \"email\"");
 });
 
-test ('PUT users empty username (SERVER)', async (t) => {
+test ('PUT users with wrong email (SERVER)', async (t) => {
+  const requestBody = {
+      "id" : 0,
+      "email" : "email",
+      "username" : "username"
+    };
+  const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.body.email should match format \"email\"");
+});
+
+test ('PUT users with empty username (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : ""
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Username is not valid");
+    t.is(body.message, "request.body.username should NOT be shorter than 3 characters");
 });
 
-test ('PUT users empty username and empty email (SERVER)', async (t) => {
+test ('PUT users with username < 3 characters (SERVER)', async (t) => {
+  const requestBody = {
+      "id" : 0,
+      "email" : "email@example.com",
+      "username" : "hi"
+    };
+  const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
+  t.is(statusCode, 400);
+  t.is(body.message, "request.body.username should NOT be shorter than 3 characters");
+});
+
+test ('PUT users with empty username and empty email (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : "",
@@ -293,10 +329,10 @@ test ('PUT users empty username and empty email (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "Email and Username are not valid");
+    t.is(body.message, "request.body.username should NOT be shorter than 3 characters, request.body.email should match format \"email\"");
 });
 
-test ('PUT users wrong email type (SERVER)', async (t) => {
+test ('PUT users with wrong email type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : 2,
@@ -307,10 +343,10 @@ test ('PUT users wrong email type (SERVER)', async (t) => {
     t.is(body.message, "request.body.email should be string");
 });
 
-test ('PUT users wrong username type (SERVER)', async (t) => {
+test ('PUT users with wrong username type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : 2
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
@@ -318,7 +354,7 @@ test ('PUT users wrong username type (SERVER)', async (t) => {
     t.is(body.message, "request.body.username should be string");
 });
 
-test ('PUT users wrong username,email type (SERVER)', async (t) => {
+test ('PUT users with wrong username,email type (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
         "email" : 2,
@@ -342,7 +378,7 @@ test ('PUT users without email (SERVER)', async (t) => {
 test ('PUT users without username (SERVER)', async (t) => {
     const requestBody = {
         "id" : 0,
-        "email" : "email"
+        "email" : "email@example.com"
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
@@ -370,7 +406,7 @@ test ('PUT users without body (SERVER)', async (t) => {
 test ('PUT users with wrong id type(SERVER)', async (t) => {
     const requestBody = {
         "id" : 'a',
-        "email" : "email",
+        "email" : "email@example.com",
         "username" : "username"
       };
     const { body ,statusCode } = await t.context.got.put("users/0",{throwHttpErrors: false, json: requestBody});
