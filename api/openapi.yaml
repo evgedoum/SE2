@@ -253,6 +253,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "200":
           description: Successful operation
@@ -274,6 +275,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       requestBody:
         description: Order data
         content:
@@ -303,6 +305,7 @@ paths:
         explode: false
         schema:
           type: integer
+          minimum: 0
       responses:
         "200":
           description: Successful operation
@@ -358,25 +361,36 @@ components:
         id: 0
     OrderProduct:
       type: object
+      required:
+      - productId
+      - quantity
       properties:
         productId:
           type: integer
+          minimum: 0
         quantity:
           type: integer
+          minimum: 1
       example:
         quantity: 5
         productId: 1
     Order:
       type: object
+      required:
+      - userId 
+      - products
       properties:
         id:
           type: integer
+          minimum: 0
         userId:
           type: integer
+          minimum: 0
         products:
           type: array
           items:
             $ref: '#/components/schemas/OrderProduct'
+          minItems: 1
       example:
         id: 0
         userId: 6
