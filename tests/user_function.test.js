@@ -1,6 +1,7 @@
 const test = require('ava');
 const { usersGET, usersUserIdGET, usersPOST, usersUserIdPUT, usersUserIdDELETE} = require('../service/DefaultService');
 
+// Create a function that tests the dummy data 
 function user_contain(t, user) {
     t.is(user.id,0);
     t.is(user.email,'email'); 
@@ -24,7 +25,6 @@ test ('GET users', async (t) => {
 test ('GET user by id', async (t) => {
     const result = await usersUserIdGET('0');
     user_contain(t, result);
-    // console.log(result);
 });
 
 test ('GET users by id without id', async (t) => {
@@ -71,7 +71,6 @@ test ('DELETE user by id', async (t) => {
   t.is(result.message, 'User deleted with ID: 0');
 });
 
-//?
 test ('DELETE users by id without id', async (t) => {
   const result = await usersUserIdDELETE('');
   t.is(result.message, 'User deleted with ID: ');
