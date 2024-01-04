@@ -1,7 +1,7 @@
 'use strict';
 
 var orderArrayResponse = function () {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = [ {
   "id" : 0,
@@ -33,7 +33,7 @@ var orderArrayResponse = function () {
 }
 
 var orderResponse = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = {
   "id" : 0,
@@ -55,7 +55,7 @@ var orderResponse = function() {
 }
 
 var userResponse = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = {
   "id" : 0,
@@ -71,7 +71,7 @@ var userResponse = function() {
 }
 
 var productResponse = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = {
   "price" : 6.027456183070403,
@@ -142,7 +142,7 @@ exports.ordersUserGET = function(user_id) {
  * returns List
  **/
 exports.productsGET = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = [ {
   "price" : 6.027456183070403,
@@ -178,7 +178,7 @@ exports.productsPOST = function(body) {
  * no response value expected for this operation
  **/
 exports.productsProductIdDELETE = function(productId) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     resolve();
   });
 }
@@ -210,7 +210,7 @@ exports.productsProductIdPUT = function(body,productId) {
  * returns List
  **/
 exports.usersGET = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var examples = {};
     examples['application/json'] = [ {
   "id" : 0,
@@ -250,7 +250,7 @@ exports.usersUserIdDELETE = function(userId) {
     examples['application/json'] = {
       "id" : userId
     };
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
       resolve({ 
         message: "User deleted with ID: " + userId
       });
