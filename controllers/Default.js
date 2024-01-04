@@ -3,6 +3,7 @@
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
 
+// Implementation of function to get all orders
 module.exports.ordersGET = function ordersGET (req, res, next) {
   Default.ordersGET()
     .then(function (response) {
@@ -13,6 +14,7 @@ module.exports.ordersGET = function ordersGET (req, res, next) {
     });
 };
 
+// Implementation of function to get an order by orderID
 module.exports.ordersOrderIdGET = function ordersOrderIdGET (req, res, next, orderId) {
   Default.ordersOrderIdGET(orderId)
     .then(function (response) {
@@ -23,6 +25,7 @@ module.exports.ordersOrderIdGET = function ordersOrderIdGET (req, res, next, ord
     });
 };
 
+// Implementation of function to modify an order by orderID
 module.exports.ordersOrderIdPUT = function ordersOrderIdPUT (req, res, next, body, orderId) {
   Default.ordersOrderIdPUT(body, orderId)
     .then(function (response) {
@@ -33,6 +36,7 @@ module.exports.ordersOrderIdPUT = function ordersOrderIdPUT (req, res, next, bod
     });
 };
 
+// Implementation of function to place an order
 module.exports.ordersPOST = function ordersPOST (req, res, next, body) {
   Default.ordersPOST(body)
     .then(function (response) {
@@ -43,6 +47,7 @@ module.exports.ordersPOST = function ordersPOST (req, res, next, body) {
     });
 };
 
+// Implementation of function to get an order by userID
 module.exports.ordersUserGET = function ordersUserGET (req, res, next, user_id) {
   Default.ordersUserGET(user_id)
     .then(function (response) {
