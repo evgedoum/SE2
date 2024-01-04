@@ -4,7 +4,7 @@ const { ordersOrderIdGET } = require('../service/DefaultService');
 const { ordersUserGET } = require('../service/DefaultService');
 const { ordersPOST } = require('../service/DefaultService');
 const { ordersOrderIdPUT } = require('../service/DefaultService');
-
+// create a finction to test the dummy data
 function order_contain(t, order) {
     // tests for the items that returns the get orders
     t.is(order.id,0);
