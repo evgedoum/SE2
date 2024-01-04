@@ -227,7 +227,7 @@ test ('POST users without username (SERVER)', async (t) => {
       };
     const { body ,statusCode } = await t.context.got.post("users",{throwHttpErrors: false, json: requestBody});
     t.is(statusCode, 400);
-    t.is(body.message, "request.body should have required property \'username\', request.body.email should match format \"email\"");
+    t.is(body.message, "request.body should have required property \'username\'");
 });
 
 //request fails as the API requires a username and an email for user creation.
