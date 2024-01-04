@@ -1,12 +1,6 @@
 'use strict';
 
-
-/**
- * Get all orders
- *
- * returns List
- **/
-exports.ordersGET = function() {
+var orderArrayResponse = function () {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -19,7 +13,7 @@ exports.ordersGET = function() {
     "quantity" : 5,
     "productId" : 1
   } ]
-}, {
+  }, {
   "id" : 0,
   "userId" : 6,
   "products" : [ {
@@ -29,7 +23,7 @@ exports.ordersGET = function() {
     "quantity" : 5,
     "productId" : 1
   } ]
-} ];
+  } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -38,14 +32,7 @@ exports.ordersGET = function() {
   });
 }
 
-
-/**
- * Get an order by ID
- *
- * orderId Integer 
- * returns Order
- **/
-exports.ordersOrderIdGET = function(orderId) {
+var orderResponse = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -58,6 +45,22 @@ exports.ordersOrderIdGET = function(orderId) {
     "quantity" : 5,
     "productId" : 1
   } ]
+  };
+      if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+var userResponse = function() {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "id" : 0,
+  "email" : "email",
+  "username" : "username"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -67,6 +70,40 @@ exports.ordersOrderIdGET = function(orderId) {
   });
 }
 
+var productResponse = function() {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "price" : 6.027456183070403,
+  "name" : "name",
+  "id" : 0
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+/**
+ * Get all orders
+ *
+ * returns List
+ **/
+exports.ordersGET = function() {
+  return orderArrayResponse();
+}
+
+/**
+ * Get an order by ID
+ *
+ * orderId Integer 
+ * returns Order
+ **/
+exports.ordersOrderIdGET = function(orderId) {
+  return orderResponse();
+}
 
 /**
  * Update an order by ID
@@ -76,27 +113,8 @@ exports.ordersOrderIdGET = function(orderId) {
  * returns Order
  **/
 exports.ordersOrderIdPUT = function(body,orderId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "id" : 0,
-  "userId" : 6,
-  "products" : [ {
-    "quantity" : 5,
-    "productId" : 1
-  }, {
-    "quantity" : 5,
-    "productId" : 1
-  } ]
-};
-      if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return orderResponse();
 }
-
 
 /**
  * Create a new order
@@ -105,27 +123,8 @@ exports.ordersOrderIdPUT = function(body,orderId) {
  * returns Order
  **/
 exports.ordersPOST = function(body) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "id" : 0,
-  "userId" : 6,
-  "products" : [ {
-    "quantity" : 5,
-    "productId" : 1
-  }, {
-    "quantity" : 5,
-    "productId" : 1
-  } ]
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return orderResponse();
 }
-
 
 /**
  * Get orders for a specific user
@@ -134,37 +133,8 @@ exports.ordersPOST = function(body) {
  * returns List
  **/
 exports.ordersUserGET = function(user_id) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "id" : 0,
-  "userId" : 6,
-  "products" : [ {
-    "quantity" : 5,
-    "productId" : 1
-  }, {
-    "quantity" : 5,
-    "productId" : 1
-  } ]
-}, {
-  "id" : 0,
-  "userId" : 6,
-  "products" : [ {
-    "quantity" : 5,
-    "productId" : 1
-  }, {
-    "quantity" : 5,
-    "productId" : 1
-  } ]
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return orderArrayResponse();
 }
-
 
 /**
  * Get all products
@@ -191,7 +161,6 @@ exports.productsGET = function() {
   });
 }
 
-
 /**
  * Create a new product
  *
@@ -199,21 +168,8 @@ exports.productsGET = function() {
  * returns Product
  **/
 exports.productsPOST = function(body) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "price" : 6.027456183070403,
-  "name" : "name",
-  "id" : 0
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return productResponse();
 }
-
 
 /**
  * Delete a product by ID
@@ -227,7 +183,6 @@ exports.productsProductIdDELETE = function(productId) {
   });
 }
 
-
 /**
  * Get a product by ID
  *
@@ -235,21 +190,8 @@ exports.productsProductIdDELETE = function(productId) {
  * returns Product
  **/
 exports.productsProductIdGET = function(productId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "price" : 6.027456183070403,
-  "name" : "name",
-  "id" : 0
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return productResponse();
 }
-
 
 /**
  * Update a product by ID
@@ -259,21 +201,8 @@ exports.productsProductIdGET = function(productId) {
  * returns Product
  **/
 exports.productsProductIdPUT = function(body,productId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "price" : 6.027456183070403,
-  "name" : "name",
-  "id" : 0
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return productResponse();
 }
-
 
 /**
  * Get all users
@@ -300,7 +229,6 @@ exports.usersGET = function() {
   });
 }
 
-
 /**
  * Create a new user
  *
@@ -308,21 +236,8 @@ exports.usersGET = function() {
  * returns User
  **/
 exports.usersPOST = function(body) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "id" : 0,
-  "email" : "email",
-  "username" : "username"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return userResponse();
 }
-
 
 /**
  * Delete a user by ID
@@ -342,7 +257,6 @@ exports.usersUserIdDELETE = function(userId) {
   });
 }
 
-
 /**
  * Get a user by ID
  *
@@ -350,21 +264,8 @@ exports.usersUserIdDELETE = function(userId) {
  * returns User
  **/
 exports.usersUserIdGET = function(userId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "id" : 0,
-  "email" : "email",
-  "username" : "username"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return userResponse();
 }
-
 
 /**
  * Update a user by ID
@@ -374,17 +275,5 @@ exports.usersUserIdGET = function(userId) {
  * returns User
  **/
 exports.usersUserIdPUT = function(body,userId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "id" : 0,
-  "email" : "email",
-  "username" : "username"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+  return userResponse();
 }
