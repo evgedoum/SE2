@@ -53,6 +53,7 @@ module.exports.ordersUserGET = function ordersUserGET (req, res, next, user_id) 
     });
 };
 
+// Implementation of function to get all products
 module.exports.productsGET = function productsGET (req, res, next) {
   Default.productsGET()
     .then(function (response) {
@@ -63,6 +64,7 @@ module.exports.productsGET = function productsGET (req, res, next) {
     });
 };
 
+// Implementation of function to add a new product
 module.exports.productsPOST = function productsPOST (req, res, next, body) {
   Default.productsPOST(body)
     .then(function (response) {
@@ -73,6 +75,7 @@ module.exports.productsPOST = function productsPOST (req, res, next, body) {
     });
 };
 
+// Implementation of function to delete a product by productID
 module.exports.productsProductIdDELETE = function productsProductIdDELETE (req, res, next, productId) {
   Default.productsProductIdDELETE(productId)
     .then(function (response) {
@@ -83,6 +86,7 @@ module.exports.productsProductIdDELETE = function productsProductIdDELETE (req, 
     });
 };
 
+// Implementation of function to get a product by productID
 module.exports.productsProductIdGET = function productsProductIdGET (req, res, next, productId) {
   Default.productsProductIdGET(productId)
     .then(function (response) {
@@ -93,6 +97,7 @@ module.exports.productsProductIdGET = function productsProductIdGET (req, res, n
     });
 };
 
+// Implementation of function to modify a product by productID
 module.exports.productsProductIdPUT = function productsProductIdPUT (req, res, next, body, productId) {
   Default.productsProductIdPUT(body, productId)
     .then(function (response) {
