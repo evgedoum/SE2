@@ -8,6 +8,37 @@ exports.respondWithCode = function(code, payload) {
   return new ResponsePayload(code, payload);
 }
 
+//
+var getResponseCode = function(arg1, arg2) {
+  var code;
+
+  if(arg2 && Number.isInteger(arg2)) {
+    code = arg2;
+  }
+  else if(arg1 && Number.isInteger(arg1)) {
+      code = arg1;
+  }
+  else {
+    // if no response code given, we default to 200
+    code = 200;
+  }
+  return code;
+}
+
+var getPayload = function (arg1){
+  var payload;
+
+  if(arg1) {
+    payload = arg1;
+  }
+
+  // Convert payload to JSON string if it's an object
+  if(typeof payload === 'object') {
+    payload = JSON.stringify(payload, null, 2);
+  }
+  return payload;
+}
+
 // Function to write JSON response to the HTTP response
 var writeJson = exports.writeJson = function(response, arg1, arg2) {
   var code;
@@ -20,29 +51,9 @@ var writeJson = exports.writeJson = function(response, arg1, arg2) {
     return;
   }
 
-  if(arg2 && Number.isInteger(arg2)) {
-    code = arg2;
-  }
-  else {
-    if(arg1 && Number.isInteger(arg1)) {
-      code = arg1;
-    }
-  }
-  if(code && arg1) {
-    payload = arg1;
-  }
-  else if(arg1) {
-    payload = arg1;
-  }
-
-  if(!code) {
-    // if no response code given, we default to 200
-    code = 200;
-  }
-  // Convert payload to JSON string if it's an object
-  if(typeof payload === 'object') {
-    payload = JSON.stringify(payload, null, 2);
-  }
+  code = getResponseCode(arg1, arg2);
+  payload = getPayload(arg1);
+  
   // Set response headers and send the response
   response.writeHead(code, {'Content-Type': 'application/json'});
   response.end(payload);
