@@ -8,7 +8,7 @@ exports.respondWithCode = function(code, payload) {
   return new ResponsePayload(code, payload);
 }
 
-//
+//Function to get response code
 var getResponseCode = function(arg1, arg2) {
   var code;
 
@@ -25,6 +25,7 @@ var getResponseCode = function(arg1, arg2) {
   return code;
 }
 
+//Function to get payload
 var getPayload = function (arg1){
   var payload;
 
