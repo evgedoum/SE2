@@ -4,6 +4,7 @@ const listen = require('test-listen');
 const got = require('got');
 const app = require('../index.js');
 
+//This function checks if the product (in response body) is correct
 const { product_contain } = require('./products_function.test.js');
 
 test.before(async (t) => {
@@ -13,12 +14,12 @@ test.before(async (t) => {
 });
 
 test.after.always((t) => {
+    // Closing the server after all tests are done
     t.context.server.close();
 });
 
 //---------------------------------------------------------------------------
 //GET /products
-
 
 test ('GET /products (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products");
@@ -37,19 +38,29 @@ test ('GET /products | Bad request with random query (SERVER)', async (t) =>{
 //---------------------------------------------------------------------------
 //GET /products/{productId}
 
+/*
+Expected values:
+path:
+    productID: interger >= 0
+
+body:
+    price: float >= 0
+    name: String with minimum length of 3
+*/
+
 test('GET /products/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/0");
     t.is(statusCode, 200);
     product_contain(t, body);
-  });
+});
 
-  test('GET /products/{productId} | wrong argument type (SERVER)', async (t) =>{
+test('GET /products/{productId} | wrong argument type (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/a");
     t.is(statusCode, 400);
     t.is(body.message, 'request.params.productId should be integer')
-  });
+});
 
-  test ('GET /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
+test ('GET /products/{productId} | Bad request with random query (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got("products/1?value=bad");
     t.is(statusCode, 400);
     t.is(body.message, "Unknown query parameter 'value'");
@@ -72,6 +83,13 @@ test('GET /products/{productId} | productID < 0 (SERVER)', async (t) =>{
 
 //---------------------------------------------------------------------------
 //POST /products
+
+/*
+Expected values:
+body:
+    price: float >= 0
+    name: String with minimum length of 3
+*/
 
 test('POST /products (SERVER)', async (t) =>{
     request_body = {
@@ -168,6 +186,16 @@ test('POST /products | name length < 3 && negative price (SERVER)', async (t) =>
 
 //---------------------------------------------------------------------------
 //PUT /products/{productID}
+
+/*
+Expected values:
+path:
+    productID: interger >= 0
+
+body:
+    price: float >= 0
+    name: String with minimum length of 3
+*/
 
 test('PUT /product/{productID} (SERVER)', async (t) =>{
     request_body = {
@@ -288,6 +316,12 @@ test('PUT /products/{productID} | name length < 3 && negative price (SERVER)', a
 //---------------------------------------------------------------------------
 //DELETE /products/{productId}
 
+/*
+Expected values:
+path:
+    productID: interger >= 0
+*/
+
 test('DELETE /products/{productId} (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.delete("products/0");
     t.is(statusCode, 200);
@@ -308,7 +342,6 @@ test ('DELETE /products/{productId} | Bad request with random query (SERVER)', a
 test('DELETE /products/{productId} | productID < 0 (SERVER)', async (t) =>{
     const { body, statusCode } = await t.context.got.delete("products/-1");
     t.is(statusCode, 400);
-
 });
 
 //_______________________________________________________________________________________________
